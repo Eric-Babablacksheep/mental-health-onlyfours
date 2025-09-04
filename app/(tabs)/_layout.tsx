@@ -36,7 +36,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
@@ -62,13 +62,13 @@ export default function TabLayout() {
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="relax"
         options={{
           title: "Relax",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="music.note" color={color} />
           ),
         }}
       />
@@ -77,7 +77,7 @@ export default function TabLayout() {
         options={{
           title: "Pet",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="cat" color={color} />
           ),
         }}
       />
