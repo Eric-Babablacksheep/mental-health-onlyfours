@@ -1,0 +1,12 @@
+export const experiencePerLevel = 15;
+export const baseMaxFullness = 20;
+export const maxFullnessIncrementPerLevel = 2;
+export const baseMaxHappiness = 20;
+export const maxHappinessIncrementPerLevel = 2;
+export const fullnessDecrementPerSecond = 0.0005;
+export const happinessDecrementPerSecond = 0.0005;
+export const experienceIncrementPerFeed = 1;
+export const experienceIncrementPerPet = 1;
+export const fullnessIncrementPerFeed = 1;
+export const happinessIncrementPerPet = 1;
+export const saveIntervalDuration = 10000;

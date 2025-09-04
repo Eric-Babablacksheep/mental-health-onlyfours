@@ -2,7 +2,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, {
   createContext,
   PropsWithChildren,
-  use,
   useEffect,
   useState,
 } from "react";
@@ -31,20 +30,27 @@ export default function createPersistentData<SchemaType extends z.ZodType>({
 
   return [
     ({ children }: PropsWithChildren) => {
-      const stored =
-        schema
-          .nullable()
-          .parse(JSON.parse(use(AsyncStorage.getItem(key)) ?? "")) ??
-        initialData;
-      const [data, setData] = useMandatoryState(stored);
+      const [value, setValue] = useMandatoryState(initialData);
 
       useEffect(() => {
-        AsyncStorage.setItem(key, JSON.stringify(data));
-      }, [data]);
+        const load = async () => {
+          setValue(
+            schema
+              .nullish()
+              .parse(JSON.parse((await AsyncStorage.getItem(key)) ?? "null")) ??
+              initialData
+          );
+        };
+        load();
+      }, []);
+
+      useEffect(() => {
+        AsyncStorage.setItem(key, JSON.stringify(value));
+      }, [value]);
 
       return (
         <context.Provider
-          value={[data, setData] as PersistentData<typeof initialData>}
+          value={[value, setValue] as PersistentData<typeof initialData>}
         >
           {children}
         </context.Provider>
