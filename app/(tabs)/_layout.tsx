@@ -36,15 +36,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="explore"
-        options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
-          ),
-        }}
-      />
       <Tabs.Screen
         name="mood"
         options={{
@@ -62,11 +53,11 @@ export default function TabLayout() {
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
         }}
-      /> */}
+      />
       <Tabs.Screen
-        name="relax"
+        name="relaxation"
         options={{
-          title: "Relax",
+          title: "Relaxation",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="music.note" color={color} />
           ),

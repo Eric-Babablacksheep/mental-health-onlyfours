@@ -22,10 +22,6 @@ module.exports = {
       borderColor: ({ theme }) => ({
         DEFAULT: theme("colors.border"), 
       }),
-      linearGradient: {
-        calm: ["hsl(260 60% 85%)", "hsl(200 50% 85%)"],
-        warm: ["hsl(25 80% 88%)", "hsl(45 70% 90%)"],
-      },
     },
   },
   plugins: [],
