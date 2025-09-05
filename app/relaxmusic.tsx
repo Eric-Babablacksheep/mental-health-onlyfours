@@ -61,7 +61,7 @@ export default function RelaxationScreen() {
     >
       {/* Meditation Music */}
       <ScrollView 
-        className="flex-1" 
+        className="flex-1 pb-8" 
         style={{ backgroundColor: "#F5FFFD" }} 
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ 
