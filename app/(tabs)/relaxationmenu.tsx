@@ -60,7 +60,7 @@ export default function RelaxationMenuScreen() {
                     <TouchableOpacity 
                         className="bg-orange-400 rounded-full px-6 py-3 flex-row items-center"
                         activeOpacity={0.8}
-                        onPress={() => router.push("/relaxation/relaxmusic")}
+                        onPress={() => router.push("/relaxmusic")}
                     >
                         <Text className="text-white font-semibold mr-2">Start</Text>
                         <ArrowRight size={16} color="white" />
@@ -91,7 +91,7 @@ export default function RelaxationMenuScreen() {
                     <TouchableOpacity 
                         className="bg-orange-400 rounded-full px-6 py-3 flex-row items-center"
                         activeOpacity={0.8}
-                        onPress={() => router.push("/relaxation/breathing")}
+                        onPress={() => router.push("/breathing")}
                     >
                         <Text className="text-white font-semibold mr-2">Start</Text>
                         <ArrowRight size={16} color="white" />

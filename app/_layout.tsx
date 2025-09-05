@@ -40,6 +40,8 @@ export default function RootLayout() {
       <Providers>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="breathing" options={{ title: "Breathing Circle Exercise" }} />
+          <Stack.Screen name="relaxmusic" options={{ title: "Meditation Playlist" }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

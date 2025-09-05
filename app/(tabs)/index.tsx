@@ -1,96 +1,102 @@
+import { motivationalQuotes } from '@/constants/Questionnaires';
 import "@/global.css";
-import { Image } from "expo-image";
-import { Platform, StyleSheet } from "react-native";
-
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { useRouter } from 'expo-router';
+import { Activity, BookOpen, Brain, Music, Sparkles, Wind } from 'lucide-react-native';
+import React from 'react';
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
+  const router = useRouter();
+  const todayQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+
+  const shortcuts = [
+    {
+      title: 'Mood Check',
+      icon: BookOpen,
+      color: '#FFB6C1',
+      route: '/relaxation'
+    },
+    {
+      title: 'Breathe',
+      icon: Wind,
+      color: '#B6E5D8',
+      route: '/breathing'
+    },
+    {
+      title: 'Music',
+      icon: Music,
+      color: '#DDA0DD',
+      route: '/relaxmusic'
+    }
+  ];
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View className="flex-row justify-between items-center mt-20 mx-6 mb-5">
+          <View className="flex-1">
+            <Text className="text-3xl font-bold text-gray-800">Hello Eric,</Text>
+            <Text className="text-base text-gray-500 mt-1">How are you feeling today?</Text>
+          </View>
+        </View>
+
+        {/* Daily Quote */}
+        <View className="mx-6 mb-6 p-5 bg-gray-100 rounded-2xl border-l-4 border-purple-500">
+          <View className="flex-row items-center mb-2">
+            <Sparkles size={20} color="#8B5CF6" />
+            <Text className="text-base font-semibold text-purple-500 ml-2">Daily Inspiration</Text>
+          </View>
+          <Text className="text-sm text-gray-600 leading-6 italic">{todayQuote}</Text>
+        </View>
+
+        {/* Mental Health Assessment Cards */}
+        <View className="px-6 mb-6">
+          <Text className="text-xl font-semibold text-gray-800 mb-4">Mental Health Check-in</Text>
+          <View className="flex-row gap-3">
+            <TouchableOpacity className="flex-1 p-4 bg-blue-50 rounded-2xl shadow-sm">
+              <View className="mb-2">
+                <Brain size={24} color="#4A90E2" />
+              </View>
+              <Text className="text-base font-semibold text-gray-800 mb-1">Depression</Text>
+              <Text className="text-xs text-gray-500 mb-2">PHQ-9 Screening</Text>
+              <Text className="text-sm font-medium text-gray-700">Current: Mild</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity className="flex-1 p-4 bg-orange-50 rounded-2xl shadow-sm">
+              <View className="mb-2">
+                <Activity size={24} color="#F5A623" />
+              </View>
+              <Text className="text-base font-semibold text-gray-800 mb-1">Anxiety</Text>
+              <Text className="text-xs text-gray-500 mb-2">GAD-7 Screening</Text>
+              <Text className="text-sm font-medium text-gray-700">Current: Moderate</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Quick Actions */}
+        <View className="px-6 mb-6">
+          <Text className="text-xl font-semibold text-gray-800 mb-4">Quick Actions</Text>
+          <View className="flex-row justify-between gap-3">
+            {shortcuts.map((shortcut, index) => {
+              const IconComponent = shortcut.icon;
+              return (
+                <TouchableOpacity
+                  key={index}
+                  className="flex-1 items-center py-5 px-4 rounded-2xl shadow-sm"
+                  style={{ backgroundColor: shortcut.color }}
+                  onPress={() => router.push(shortcut.route as any)}
+                >
+                  <IconComponent size={32} color="#FFFFFF" />
+                  <Text className="mt-2 text-sm font-semibold text-white text-center">{shortcut.title}</Text>
+                </TouchableOpacity>
+              );
             })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">
-            npm run reset-project
-          </ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime, rem
-          corporis odio pariatur voluptatum accusamus possimus quas at et eaque
-          eius corrupti excepturi explicabo laborum quasi dignissimos error
-          consectetur? Dolores? Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Cumque labore adipisci corporis repudiandae eum,
-          repellendus magni non voluptas. Ab provident nesciunt, debitis
-          accusamus accusantium veniam esse alias. Suscipit, velit incidunt.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam veniam
-          inventore voluptatibus quisquam facilis eveniet est. Quibusdam animi
-          quisquam quod nihil. Quis, quam voluptate delectus ad sit commodi
-          numquam non!
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+          </View>
+        </View>
+
+        <View className="h-5" />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-  },
-});

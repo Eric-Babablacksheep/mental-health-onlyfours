@@ -111,7 +111,7 @@ export default function RelaxationScreen() {
             <Text className="text-3xl text-center font-semibold text-gray-800 pt-1">Breathing Circle</Text>
             <Text className="text-xl text-center font-semibold text-gray-500 my-2 pt-1">Find your inner peace</Text>
             <View className="items-center">
-                <View className="h-96 w-50 justify-center items-center mb-8">
+                <View className="h-72 w-50 justify-center items-center my-5">
                 <Animated.View
                     className="w-48 h-48 rounded-full bg-indigo-100 justify-center items-center border-4 border-purple-500"
                     style={{
