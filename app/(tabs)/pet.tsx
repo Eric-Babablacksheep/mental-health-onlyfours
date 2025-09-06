@@ -1,7 +1,7 @@
 import { CanContext } from "@/components/CanProvider";
 import { PetDataContext } from "@/components/PetDataProvider";
 import { PetLastTimestampContext } from "@/components/PetLastTimestampProvider";
-import { ThemedText } from "@/components/ThemedText";
+import ProgressBar from "@/components/ProgressBar";
 import {
   baseMaxFullness,
   baseMaxHappiness,
@@ -17,12 +17,42 @@ import {
   saveIntervalDuration,
 } from "@/constants/Pet";
 import { useAppState } from "@react-native-community/hooks";
+import { Cat, Fish, Hand } from "lucide-react-native";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { Button, StyleSheet } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface CleanUpData {
   decrementIntervalHandler: number;
   saveIntervalHandler: number;
+}
+
+const lackingCanMessages = ["There is no can left!", "I cannot find any can!"];
+
+const enoughPetMessages = [
+  "Enough Petting!",
+  "No more pet please!",
+  "No more!",
+];
+
+const enoughFeedMessages = [
+  "Enough food!",
+  "I am full!",
+  "No more please!",
+  "I'm bloated!",
+  "Please no more food!",
+];
+
+function pickRandom<ElementType>(p_array: Array<ElementType>) {
+  const randomizedIndex = Math.round(Math.random() * (p_array.length - 1));
+  return p_array[randomizedIndex];
 }
 
 export default function Pet() {
@@ -84,16 +114,16 @@ export default function Pet() {
     setPetData(newPetData);
   }, [experience, fullness, happiness]);
 
-  const notifyCanNotEnough = useCallback(() => {
-    /// TODO: Implement.
+  const notifyLackingCan = useCallback(() => {
+    Alert.alert(pickRandom(lackingCanMessages));
   }, []);
 
   const notifyEnoughPet = useCallback(() => {
-    /// TODO: Implement.
+    Alert.alert(pickRandom(enoughPetMessages));
   }, []);
 
   const notifyEnoughFeed = useCallback(() => {
-    /// TODO: Implement.
+    Alert.alert(pickRandom(enoughFeedMessages));
   }, []);
 
   const pet = useCallback(() => {
@@ -111,13 +141,21 @@ export default function Pet() {
       return;
     }
     if (can === 0) {
-      notifyCanNotEnough();
+      notifyLackingCan();
       return;
     }
     setCan((prev) => prev - 1);
     setFullness((prev) => rectifyFullness(prev + fullnessIncrementPerFeed));
     setExperience((prev) => prev + experienceIncrementPerFeed);
   }, [maxFullness, fullness]);
+
+  const happinessPercentage = useMemo(() => {
+    return Math.round((happiness / maxHappiness) * 100);
+  }, [happiness, maxHappiness]);
+
+  const fullnessPercentage = useMemo(() => {
+    return Math.round((fullness / maxFullness) * 100);
+  }, [fullness, maxFullness]);
 
   useEffect(() => {
     if (decrementTick === null) return;
@@ -177,48 +215,200 @@ export default function Pet() {
   }, []);
 
   return (
-    <>
-      <ThemedText>Can: {can}</ThemedText>
-      <Button
-        title="Increment Can"
-        onPress={() => setCan((prev) => prev + 1)}
-      ></Button>
-      <ThemedText>Level: {level}</ThemedText>
-      <ThemedText>Rest Experience: {restExperience}</ThemedText>
-      <ThemedText>Experience: {experience}</ThemedText>
-      <ThemedText>Fullness: {fullness}</ThemedText>
-      <Button
-        title="Feed"
-        onPress={() => {
-          feed();
-        }}
-      ></Button>
-      <ThemedText>Happiness: {happiness}</ThemedText>
-      <Button
-        title="Pet"
-        onPress={() => {
-          pet();
-        }}
-      ></Button>
-    </>
+    <SafeAreaView style={style.container}>
+      <View style={style.header}>
+        <Text style={style.title}>Your Companion</Text>
+        <Text style={style.subtitle}>Your caring digital friend</Text>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={style.section}>
+          <View style={style.petCard}>
+            <View style={style.petAvatarSection}>
+              <Cat size={60}></Cat>
+              <Text style={style.petAvatarName}>Skittle</Text>
+            </View>
+            <View style={style.petProgressSection}>
+              <View style={style.petProgress}>
+                <Fish></Fish>
+                <ProgressBar fillPercentage={fullnessPercentage}></ProgressBar>
+              </View>
+              <View style={style.petProgress}>
+                <Hand></Hand>
+                <ProgressBar fillPercentage={happinessPercentage}></ProgressBar>
+              </View>
+            </View>
+            <View style={style.petActionsGrid}>
+              <TouchableOpacity style={style.petActionButton} onPress={feed}>
+                <Fish></Fish>
+                <Text>Feed</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={style.petActionButton} onPress={pet}>
+                <Hand></Hand>
+                <Text>Pet</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <View style={style.section}>
+          <Text style={style.sectionTitle}>Companion Stats</Text>
+          <View style={style.statsGrid}>
+            <View style={style.statCard}>
+              <Text style={style.statValue}>{fullnessPercentage}%</Text>
+              <Text style={style.statLabel}>Fullness</Text>
+            </View>
+            <View style={style.statCard}>
+              <Text style={style.statValue}>{happinessPercentage}%</Text>
+              <Text style={style.statLabel}>Happiness</Text>
+            </View>
+            <View style={style.statCard}>
+              <Text style={style.statValue}>{can}</Text>
+              <Text style={style.statLabel}>Can count</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={style.section}>
+          <Text style={style.sectionTitle}>Care Tips</Text>
+          <View style={style.tipCard}>
+            <Text style={style.tipTitle}>Collect cans</Text>
+            <Text style={style.tipDescription}>
+              Obtain cans from writing diaries and doing breathing exercises.
+            </Text>
+          </View>
+          <View style={style.tipCard}>
+            <Text style={style.tipTitle}>Feed your companion</Text>
+            <Text style={style.tipDescription}>
+              Using cans you collected and feed your companion.
+            </Text>
+          </View>
+          <View style={style.tipCard}>
+            <Text style={style.tipTitle}>Pet your companion</Text>
+            <Text style={style.tipDescription}>
+              Make your companion happy by petting it.
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 24,
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 16,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "700",
+    color: "#1F2937",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#6B7280",
+    marginTop: 4,
+  },
+  petCard: {
+    marginHorizontal: "auto",
+    width: "100%",
+    maxWidth: 300,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 20,
+  },
+  petAvatarSection: {
+    padding: 30,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  petAvatarName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#1F2937",
+  },
+  petProgressSection: {
+    marginBottom: 20,
+  },
+  petProgress: {
+    padding: 10,
+  },
+  petActionsGrid: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  petActionButton: {
+    flex: 1,
+    backgroundColor: "#F4C2C2",
+    borderRadius: 12,
+    padding: 16,
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    justifyContent: "space-around",
   },
-  stepContainer: {
-    gap: 8,
+  statsGrid: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#8B5CF6",
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: "#6B7280",
+    textAlign: "center",
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#1F2937",
+    marginBottom: 16,
+  },
+  tipCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  tipTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#1F2937",
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+  tipDescription: {
+    fontSize: 14,
+    color: "#6B7280",
+    lineHeight: 20,
   },
 });
