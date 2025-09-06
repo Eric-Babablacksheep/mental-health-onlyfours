@@ -19,7 +19,8 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'music.note': 'music-note',
-  'cat': 'catching-pokemon'
+  'cat': 'catching-pokemon',
+  'book': 'book'
 } as IconMapping;
 
 /**
